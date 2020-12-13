@@ -71,8 +71,8 @@ def list():
 def rainmeter():
     server = build()
 
-    text = f'<head>{server.name}</head>\n'
-    text += '<list>\n'
+    text = f'<head>[{server.name}]</head>'
+    text += '<list>'
 
     for channel in server.channels:
         for client in channel.clients:
