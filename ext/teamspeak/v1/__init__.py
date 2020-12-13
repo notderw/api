@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from ipaddress import ip_address
 
 from fastapi import APIRouter
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import HTMLResponse
 
 from ratelimit import RateLimitMiddleware, Rule
 from ratelimit.auths import EmptyInformation
@@ -67,7 +67,7 @@ router = APIRouter(prefix="/v1")
 def list():
     return build().dict(by_alias=False)
 
-@router.get('/rainmeter', response_class=PlainTextResponse)
+@router.get('/rainmeter', response_class=HTMLResponse)
 def rainmeter():
     server = build()
 
