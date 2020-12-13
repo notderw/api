@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+ts3 = "==2.0.0b3"
+gunicorn = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+
+[packages.asgi-ratelimit]
+extras = [ "redis",]
