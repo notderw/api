@@ -97,6 +97,9 @@ def rainmeter():
 
 
 async def ratelimit(scope) -> Tuple[str, str]:
+    headers = {h[0].decode(): h[1].decode() for h in scope['headers']}
+    if 'cf-connecting-ip' in headers:
+        return headers['cf-connecting-ip'], 'default'
     try:
         return await client_ip(scope)
 
@@ -107,7 +110,7 @@ async def ratelimit(scope) -> Tuple[str, str]:
 
 async def handle_429(scope, receive, send) -> None:
     await send({"type": "http.response.start", "status": 429})
-    await send({"type": "http.response.body", "body": b"You are being rate limited", "more_body": False})
+    await send({"type": "http.response.body", "body": b"<head>[You are being rate limited]</head>", "more_body": False})
 
 
 def setup(app):
@@ -116,7 +119,7 @@ def setup(app):
         authenticate=ratelimit,
         backend=RedisBackend(host="redis"),
         config={
-            r'^/ts/v1/rainmeter': [Rule(minute=2, block_time=60)]
+            r'^/ts/v1/rainmeter': [Rule(minute=59, block_time=60)]
         },
         on_blocked=handle_429
     )
