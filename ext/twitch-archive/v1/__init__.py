@@ -30,8 +30,6 @@ class ConnectionManager:
 router = APIRouter(prefix="/v1")
 manager = ConnectionManager()
 
-user_ids = []
-
 @router.post('/stream/{user_id}')
 async def stream(request: Request, user_id: str):
     signature = request.headers.get("X-Hub-Signature", "").replace("sha256=", "")
@@ -52,12 +50,6 @@ async def stream(request: Request, user_id: str):
 # this is how Twitch verifies ownership of the endpoint
 @router.get('/stream/{user_id}')
 async def stream_verification(request: Request, user_id: str):
-    if request.query_params["hub.mode"] == "subscribe":
-        if not user_id or user_id not in user_ids:
-            return Response(status_code=403)
-
-        user_ids.remove(user_id)
-
     challenge = request.query_params["hub.challenge"]
     return PlainTextResponse(challenge, status_code=200)
 
@@ -73,12 +65,6 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_json()
-
-            _type = data.get("type")
-            user_id = data.get("user_id")
-
-            if _type == "stream_add":
-                user_ids.append(user_id)
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
