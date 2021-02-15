@@ -21,7 +21,7 @@ class ConnectionManager:
 
     async def broadcast(self, message):
         for connection in self.active_connections:
-                connection.send_json(message)
+                await connection.send_json(message)
 
 
 router = APIRouter(prefix="/v1")
