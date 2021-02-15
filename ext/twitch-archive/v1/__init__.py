@@ -63,7 +63,7 @@ async def stream_verification(request: Request, user_id: str):
 # websockets don't care about the router heirchy for some reason
 @router.websocket("/twitch-archive/v1/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    if SECRET != urlsafe_b64decode(websocket.headers.get("Authorization").replace("Bearer ", "")).decode(): # shitty auth
+    if SECRET != urlsafe_b64decode(websocket.headers.get("X-Authorization").replace("Basic ", "")).decode(): # shitty auth
         return
 
     print(f'New WS connection: {websocket.client}')
