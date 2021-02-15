@@ -52,10 +52,11 @@ async def stream(request: Request, user_id: str):
 # this is how Twitch verifies ownership of the endpoint
 @router.get('/stream/{user_id}')
 async def stream_verification(request: Request, user_id: str):
-    if not user_id or user_id not in user_ids:
-        return Response(status_code=403)
+    if request.query_params["hub.mode"] == "subscribe":
+        if not user_id or user_id not in user_ids:
+            return Response(status_code=403)
 
-    user_ids.remove(user_id)
+        user_ids.remove(user_id)
 
     challenge = request.query_params["hub.challenge"]
     return PlainTextResponse(challenge, status_code=200)
