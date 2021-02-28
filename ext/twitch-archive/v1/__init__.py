@@ -1,5 +1,4 @@
 import os
-import hmac
 from typing import List
 from hashlib import sha256
 from base64 import urlsafe_b64decode
@@ -36,7 +35,7 @@ async def stream(request: Request, user_id: str):
     signature = request.headers.get("X-Hub-Signature", "").replace("sha256=", "")
     payload = await request.body()
 
-    if signature != hmac.new(SECRET.encode(), msg=payload, digestmod=sha256).hexdigest():
+    if signature != sha256(payload + SECRET.encode()).hexdigest():
         return Response(status_code=403)
 
     data = await request.json()
