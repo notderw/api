@@ -2,7 +2,7 @@ from asyncio import sleep
 from typing import List
 
 from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
-from fastapi.responses import Response, PlainTextResponse
+from fastapi.responses import Response
 
 
 class ConnectionManager:
@@ -33,11 +33,6 @@ async def stream(request: Request):
     await manager.broadcast(data)
     return Response(status_code=202)
 
-# this is how Twitch verifies ownership of the endpoint
-@router.get('/stream')
-async def stream_verification(request: Request):
-    challenge = request.query_params["hub.challenge"]
-    return PlainTextResponse(challenge, status_code=200)
 
 # websockets don't care about the router heirchy for some reason
 @router.websocket("/twitch-archive/v1/ws")
