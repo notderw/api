@@ -1,7 +1,6 @@
 import os
 from typing import List
 from hashlib import sha256
-from base64 import urlsafe_b64decode
 
 from fastapi import APIRouter, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import Response, PlainTextResponse
@@ -63,7 +62,7 @@ async def stream_verification(request: Request, user_id: str):
 # websockets don't care about the router heirchy for some reason
 @router.websocket("/twitch-archive/v1/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    if SECRET != urlsafe_b64decode(websocket.headers.get("Authorization").replace("Bearer ", "")).decode(): # shitty auth
+    if SECRET != websocket.headers.get("Authorization").replace("Bearer ", ""): # shitty auth
         return
 
     print(f'New WS connection: {websocket.client}')
