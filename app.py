@@ -8,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 extensions = (
     'teamspeak',
-    'twitch-archive',
 )
 
 

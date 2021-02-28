@@ -8,7 +8,6 @@ fastapi = "*"
 uvicorn = "*"
 ts3 = "==2.0.0b3"
 gunicorn = "*"
-websockets = "*"
 
 [dev-packages]
 
