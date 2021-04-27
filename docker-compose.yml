@@ -3,7 +3,7 @@ services:
         image: redis:latest
         volumes:
             - ./data/redis:/data
-        restart: always
+        restart: unless-stopped
 
     web:
         build:
@@ -15,5 +15,6 @@ services:
             - redis
         ports:
             - "8000:8000"
+        restart: unless-stopped
 
 version: "3"
